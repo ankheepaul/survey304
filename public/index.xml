@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Hugo website</title>
+    <link>/</link>
+    <description>Recent content on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
+      
+      <guid>/about/</guid>
+      <description>This is a &amp;ldquo;hello world&amp;rdquo; example website for the blogdown package. The theme was forked from @jrutheiser/hugo-lithium-theme and modified by Yihui Xie.</description>
+    </item>
+    
+    <item>
+      <title>Education &amp; Gender May Bias Election Results</title>
+      <link>/1/01/01/education-gender-may-bias-election-results/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/1/01/01/education-gender-may-bias-election-results/</guid>
+      <description>I.Introduction We explore the education level of Canadians based on gender groups. This allows some degree of understanding of election issues and party preferences. We find that the Canadian literacy rate is high, with a higher proportion of survey respondents being educated women while the LGBTQ+ comprises a very small proportion.
+A bar plot is constructed that shows the level of education completed by Canadians who have undertaken the survey.</description>
+    </item>
+    
+  </channel>
+</rss>

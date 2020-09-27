@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.75.1" />
+
+
+<title>Education &amp; Gender May Bias Election Results - A Hugo website</title>
+<meta property="og:title" content="Education &amp; Gender May Bias Election Results - A Hugo website">
+
+
+  <link href='../../../../favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="../../../../css/fonts.css" media="all">
+<link rel="stylesheet" href="../../../../css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="../../../../" class="nav-logo">
+    <img src="../../../../images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="../../../../about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">9 min read</span>
+    
+
+    <h1 class="article-title">Education &amp; Gender May Bias Election Results</h1>
+
+    
+    <span class="article-date">0001-01-01</span>
+    
+
+    <div class="article-content">
+      
+
+
+<div id="i.introduction" class="section level2">
+<h2>I.Introduction</h2>
+<p>We explore the education level of Canadians based on gender groups. This allows some degree of understanding of election issues and party preferences. We find that the Canadian literacy rate is high, with a higher proportion of survey respondents being educated women while the LGBTQ+ comprises a very small proportion.</p>
+<p>A bar plot is constructed that shows the level of education completed by Canadians who have undertaken the survey. Moreover, the plot divides the respondents into the respective gender groups they identify themselves as.</p>
+<p>The paper outlines the fact that gender representation and the education level provide the ability for the population to understand issues pertaining to the election and a small representation of a certain group can bias results in a way that parties with policies in their interests, are not supported enough. The weakness here would be that everyone taking that survey may not intend to vote or may not be have enough awareness regarding issues in which case results can vary due to random voting. For the future, we intend to make a graph that shows the proportion of each gender group intending to actually vote in the election and their awareness regarding issues.</p>
+<pre class="r"><code>knitr::opts_chunk$set(echo = FALSE)
+setwd(&quot;/cloud/project&quot;)
+install.packages(&quot;devtools&quot;)</code></pre>
+<pre><code>## Installing package into &#39;/home/rstudio-user/R/x86_64-pc-linux-gnu-library/4.0&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre class="r"><code>devtools::install_github(&quot;hodgettsp/cesR&quot;)</code></pre>
+<pre><code>## Skipping install of &#39;cesR&#39; from a github remote, the SHA1 (7c780beb) has not changed since last install.
+##   Use `force = TRUE` to force installation</code></pre>
+<pre class="r"><code>cesR::get_cescodes()</code></pre>
+<pre><code>##    index ces_survey_code get_ces_call_char
+## 1      1     ces2019_web     &quot;ces2019_web&quot;
+## 2      2   ces2019_phone   &quot;ces2019_phone&quot;
+## 3      3     ces2015_web     &quot;ces2015_web&quot;
+## 4      4   ces2015_phone   &quot;ces2015_phone&quot;
+## 5      5   ces2015_combo   &quot;ces2015_combo&quot;
+## 6      6         ces2011         &quot;ces2011&quot;
+## 7      7         ces2008         &quot;ces2008&quot;
+## 8      8         ces2004         &quot;ces2004&quot;
+## 9      9         ces0411         &quot;ces0411&quot;
+## 10    10         ces0406         &quot;ces0406&quot;
+## 11    11         ces2000         &quot;ces2000&quot;
+## 12    12         ces1997         &quot;ces1997&quot;
+## 13    13         ces1993         &quot;ces1993&quot;
+## 14    14         ces1988         &quot;ces1988&quot;
+## 15    15         ces1984         &quot;ces1984&quot;
+## 16    16         ces1974         &quot;ces1974&quot;
+## 17    17         ces7480         &quot;ces7480&quot;
+## 18    18      ces72_jnjl      &quot;ces72_jnjl&quot;
+## 19    19       ces72_sep       &quot;ces72_sep&quot;
+## 20    20       ces72_nov       &quot;ces72_nov&quot;
+## 21    21         ces1968         &quot;ces1968&quot;
+## 22    22         ces1965         &quot;ces1965&quot;</code></pre>
+<pre class="r"><code>library(&quot;cesR&quot;)
+install.packages(&quot;tidyverse&quot;)</code></pre>
+<pre><code>## Installing package into &#39;/home/rstudio-user/R/x86_64-pc-linux-gnu-library/4.0&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre class="r"><code>install.packages(&quot;readr&quot;)</code></pre>
+<pre><code>## Installing package into &#39;/home/rstudio-user/R/x86_64-pc-linux-gnu-library/4.0&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre class="r"><code>install.packages(&quot;skimr&quot;)</code></pre>
+<pre><code>## Installing package into &#39;/home/rstudio-user/R/x86_64-pc-linux-gnu-library/4.0&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(readr)
+library(skimr)
+install.packages(&quot;labelled&quot;)</code></pre>
+<pre><code>## Installing package into &#39;/home/rstudio-user/R/x86_64-pc-linux-gnu-library/4.0&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre class="r"><code>library(labelled)
+get_ces(&quot;ces2019_web&quot;)</code></pre>
+<pre><code>## TO CITE THIS SURVEY FILE:
+## 
+## - Stephenson, Laura B; Harell, Allison; Rubenson, Daniel; Loewen, Peter John, 2020, &#39;2019 Canadian Election Study - Online Survey&#39;, https://doi.org/10.7910/DVN/DUS88V, Harvard Dataverse, V1
+## 
+## - Stephenson, Laura, Allison Harrel, Daniel Rubenson and Peter Loewen. Forthcoming. &#39;Measuring Preferences and Behaviour in the 2019 Canadian Election Study,&#39; Canadian Journal of Political Science.
+## 
+## LINK: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/DUS88V</code></pre>
+<pre class="r"><code>ces2019_web &lt;- to_factor(ces2019_web)
+head(ces2019_web)</code></pre>
+<pre><code>## # A tibble: 6 x 620
+##   cps19_StartDate     cps19_EndDate       cps19_ResponseId cps19_consent
+##   &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;            &lt;fct&gt;        
+## 1 2019-09-13 08:09:44 2019-09-13 08:36:19 R_1OpYXEFGzHRUp… I consent to…
+## 2 2019-09-13 08:39:09 2019-09-13 08:57:06 R_2qdrL3J618rxY… I consent to…
+## 3 2019-09-13 10:01:19 2019-09-13 10:27:29 R_USWDAPcQEQiMm… I consent to…
+## 4 2019-09-13 10:05:37 2019-09-13 10:50:53 R_3IQaeDXy0tBzE… I consent to…
+## 5 2019-09-13 10:05:52 2019-09-13 10:32:53 R_27WeMQ1asip2c… I consent to…
+## 6 2019-09-13 10:10:20 2019-09-13 10:29:45 R_3LiGZcCWJEcWV… I consent to…
+## # … with 616 more variables: cps19_citizenship &lt;fct&gt;, cps19_yob &lt;fct&gt;,
+## #   cps19_yob_2001_age &lt;fct&gt;, cps19_gender &lt;fct&gt;, cps19_province &lt;fct&gt;,
+## #   cps19_education &lt;fct&gt;, cps19_demsat &lt;fct&gt;, cps19_imp_iss &lt;chr&gt;,
+## #   cps19_imp_iss_party &lt;fct&gt;, cps19_imp_iss_party_7_TEXT &lt;chr&gt;,
+## #   cps19_imp_loc_iss &lt;chr&gt;, cps19_imp_loc_iss_p &lt;fct&gt;,
+## #   cps19_imp_loc_iss_p_7_TEXT &lt;chr&gt;, cps19_interest_gen_1 &lt;dbl&gt;,
+## #   cps19_interest_elxn_1 &lt;dbl&gt;, cps19_v_likely &lt;fct&gt;, cps19_v_likely_pr &lt;fct&gt;,
+## #   cps19_votechoice &lt;fct&gt;, cps19_votechoice_7_TEXT &lt;chr&gt;,
+## #   cps19_votechoice_pr &lt;fct&gt;, cps19_votechoice_pr_7_TEXT &lt;chr&gt;,
+## #   cps19_vote_unlikely &lt;fct&gt;, cps19_vote_unlikely_7_TEXT &lt;chr&gt;,
+## #   cps19_vote_unlike_pr &lt;fct&gt;, cps19_vote_unlike_pr_7_TEXT &lt;chr&gt;,
+## #   cps19_v_advance &lt;fct&gt;, cps19_v_advance_7_TEXT &lt;chr&gt;, cps19_vote_lean &lt;fct&gt;,
+## #   cps19_vote_lean_7_TEXT &lt;chr&gt;, cps19_vote_lean_pr &lt;fct&gt;,
+## #   cps19_vote_lean_pr_7_TEXT &lt;chr&gt;, cps19_2nd_choice &lt;fct&gt;,
+## #   cps19_2nd_choice_7_TEXT &lt;chr&gt;, cps19_2nd_choice_pr &lt;fct&gt;,
+## #   cps19_2nd_choice_pr_7_TEXT &lt;chr&gt;, cps19_not_vote_for_1 &lt;fct&gt;,
+## #   cps19_not_vote_for_2 &lt;fct&gt;, cps19_not_vote_for_3 &lt;fct&gt;,
+## #   cps19_not_vote_for_4 &lt;fct&gt;, cps19_not_vote_for_5 &lt;fct&gt;,
+## #   cps19_not_vote_for_6 &lt;fct&gt;, cps19_not_vote_for_7 &lt;fct&gt;,
+## #   cps19_not_vote_for_8 &lt;fct&gt;, cps19_not_vote_for_9 &lt;fct&gt;,
+## #   cps19_not_vote_for_7_TEXT &lt;chr&gt;, cps19_fed_gov_sat &lt;fct&gt;,
+## #   cps19_party_rating_23 &lt;dbl&gt;, cps19_party_rating_24 &lt;dbl&gt;,
+## #   cps19_party_rating_25 &lt;dbl&gt;, cps19_party_rating_26 &lt;dbl&gt;,
+## #   cps19_party_rating_27 &lt;dbl&gt;, cps19_party_rating_28 &lt;dbl&gt;,
+## #   cps19_lead_rating_23 &lt;dbl&gt;, cps19_lead_rating_24 &lt;dbl&gt;,
+## #   cps19_lead_rating_25 &lt;dbl&gt;, cps19_lead_rating_26 &lt;dbl&gt;,
+## #   cps19_lead_rating_27 &lt;dbl&gt;, cps19_lead_rating_28 &lt;dbl&gt;,
+## #   cps19_cand_rating_23 &lt;dbl&gt;, cps19_cand_rating_24 &lt;dbl&gt;,
+## #   cps19_cand_rating_25 &lt;dbl&gt;, cps19_cand_rating_26 &lt;dbl&gt;,
+## #   cps19_cand_rating_27 &lt;dbl&gt;, cps19_cand_rating_28 &lt;dbl&gt;,
+## #   cps19_lr_scale_bef_1 &lt;dbl&gt;, cps19_lr_parties_1 &lt;dbl&gt;,
+## #   cps19_lr_parties_2 &lt;dbl&gt;, cps19_lr_parties_3 &lt;dbl&gt;,
+## #   cps19_lr_parties_4 &lt;dbl&gt;, cps19_lr_parties_5 &lt;dbl&gt;,
+## #   cps19_lr_parties_6 &lt;dbl&gt;, cps19_lr_scale_aft_1 &lt;dbl&gt;,
+## #   cps19_lead_int_113 &lt;fct&gt;, cps19_lead_int_114 &lt;fct&gt;,
+## #   cps19_lead_int_115 &lt;fct&gt;, cps19_lead_int_116 &lt;fct&gt;,
+## #   cps19_lead_int_117 &lt;fct&gt;, cps19_lead_int_118 &lt;fct&gt;,
+## #   cps19_lead_int_119 &lt;fct&gt;, cps19_lead_int_120 &lt;fct&gt;,
+## #   cps19_lead_strong_113 &lt;fct&gt;, cps19_lead_strong_114 &lt;fct&gt;,
+## #   cps19_lead_strong_115 &lt;fct&gt;, cps19_lead_strong_116 &lt;fct&gt;,
+## #   cps19_lead_strong_117 &lt;fct&gt;, cps19_lead_strong_118 &lt;fct&gt;,
+## #   cps19_lead_strong_119 &lt;fct&gt;, cps19_lead_strong_120 &lt;fct&gt;,
+## #   cps19_lead_trust_113 &lt;fct&gt;, cps19_lead_trust_114 &lt;fct&gt;,
+## #   cps19_lead_trust_115 &lt;fct&gt;, cps19_lead_trust_116 &lt;fct&gt;,
+## #   cps19_lead_trust_117 &lt;fct&gt;, cps19_lead_trust_118 &lt;fct&gt;,
+## #   cps19_lead_trust_119 &lt;fct&gt;, cps19_lead_trust_120 &lt;fct&gt;,
+## #   cps19_lead_cares_113 &lt;fct&gt;, cps19_lead_cares_114 &lt;fct&gt;,
+## #   cps19_lead_cares_115 &lt;fct&gt;, cps19_lead_cares_116 &lt;fct&gt;, …</code></pre>
+<pre class="r"><code>skimr::skim(&quot;ces2019_web&quot;)</code></pre>
+<table>
+<caption><span id="tab:setup">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">“ces2019_web”</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">data</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">11</td>
+<td align="right">11</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="ii.data" class="section level2">
+<h2>II.Data</h2>
+<p>The data set used in this report is the “ces2019_web” data set. It his survey data from the 2019 Canadian Election Study downloaded via that cesR package in R.</p>
+<p>The data set was cleaned and contained answers to survey questions that were mostly close-ended, nominal questions asking people whether they are Canadian citizens, their gender,etc. There are some open-ended questions such as what the respondent thinks is the most important issue in the federal election. There are also some likert and rating scale questions, that ask respondents their degree of satisfaction and a numeric measure of it through a sliding scale.</p>
+<p>The answers in the data set have been converted to factors or categorical answers in order to make it easier to produce a graph.</p>
+</div>
+<div id="iii.graph" class="section level2">
+<h2>III.Graph</h2>
+<p><img src="../../../../post/2020-09-27-r-rmarkdown_files/figure-html/unnamed-chunk-1-1.png" width="960" />
+## IV.Discussion</p>
+<p>The graph produced is a bar plot using ggplot from the “tidyverse” package in R.
+In this bar plot, we categorize the respondents in terms of gender and the level of education they have completed. The highest number of respondents are women who have completed a bachelor’s degree.</p>
+<p>There are two things to be observed here. Firstly, there is a very small percentage of respondents who have never been to a school or prefer not to answer. This implies that a high literacy rate in Canada encourages the ability to understand, and be more aware about issues, therefore, shaping voting decisions that would be beneficial for the country.</p>
+<p>In almost all the different levels of education, women dominate, indicating that a higher proportion of educated women are taking part in the survey and the election, compared to men, and other gender identities. However, there is an extremely small proportion of the LGBTQ+ community represented in the graph. This suggests that either the community is not represented enough in the survey, and the elections or the community represents a very small proportion of the population. Moreover, the proportion of the LGBTQ+ community taking the survey seem to have received some degree of education, implying a fairly high literacy within the community.</p>
+<p>These findings have the certain implications towards the voting and policy preferences of the population. Since most of the sample seems to have some degree of education, it can be safe to assume that they would be able to, somewhat, understand some issues pertaining to the country in which case voting will not be random, in majority. Most importantly, their preference would lean towards parties resolving some of aforementioned issues or those, with policies that provide personal benefit to them, their families, etc. With such a small representation of the LGBTQ+ community, there may arise the situation where the results declare the winning party as one that does not necessarily have any policies benefiting the community, compared to some other party that may actually have policies favoring the LGBTQ+ community. In other words, the election results may be biased towards the preferences of a specific gender group, in this case, mostly women as they seem to be the largest proportion to have taken the survey.</p>
+</div>
+<div id="v.weaknesses-and-next-steps." class="section level2">
+<h2>V.Weaknesses and Next Steps.</h2>
+<p>There is a very obvious weakness here which is that everyone who responded to the survey may not end up voting. In that case, we would have to compare how many people from each gender group intend to vote in the elections.</p>
+<p>It is also fair to assume that other genders can look out for the interests of the LGBTQ+ community and the results may not be as biased. Moreover, a higher level of education may not always indicate awareness of issues. To check this, we would have to make a graph categorizing the gender groups on their awareness of issues.</p>
+</div>
+<div id="vi.references" class="section level2">
+<h2>VI.References</h2>
+<ul>
+<li><p>Stephenson, Laura B; Harell, Allison; Rubenson, Daniel; Loewen, Peter John, 2020, ‘2019 Canadian Election Study - Online Survey’, <a href="https://doi.org/10.7910/DVN/DUS88V" class="uri">https://doi.org/10.7910/DVN/DUS88V</a>, Harvard Dataverse, V1</p></li>
+<li><p>Stephenson, Laura, Allison Harrel, Daniel Rubenson and Peter Loewen. Forthcoming. ‘Measuring Preferences and Behaviour in the 2019 Canadian Election Study,’ Canadian Journal of Political Science.</p></li>
+<li><p>Paul A. Hodgetts and Rohan Alexander (2020). cesR:
+Access the CES Datasets a Little Easier.. R package
+version 0.1.0.</p></li>
+</ul>
+<p>-Hadley Wickham, Jim Hester and Winston Chang (2020).
+devtools: Tools to Make Developing R Packages Easier.
+<a href="https://devtools.r-lib.org/,https://github.com/r-lib/devtools" class="uri">https://devtools.r-lib.org/,https://github.com/r-lib/devtools</a>.</p>
+<ul>
+<li><p>Wickham et al., (2019). Welcome to the tidyverse.
+Journal of Open Source Software, 4(43), 1686,
+<a href="https://doi.org/10.21105/joss.01686" class="uri">https://doi.org/10.21105/joss.01686</a></p></li>
+<li><p>R Core Team (2020). R: A language and environment for
+statistical computing. R Foundation for Statistical
+Computing, Vienna, Austria. URL <a href="https://www.R-project.org/" class="uri">https://www.R-project.org/</a>.</p></li>
+</ul>
+<p>-JJ Allaire and Yihui Xie and Jonathan McPherson and
+Javier Luraschi and Kevin Ushey and Aron Atkins and
+Hadley Wickham and Joe Cheng and Winston Chang and
+Richard Iannone (2020). rmarkdown: Dynamic Documents
+for R. R package version 2.3. URL
+<a href="https://rmarkdown.rstudio.com" class="uri">https://rmarkdown.rstudio.com</a>.</p>
+<p>Yihui Xie and J.J. Allaire and Garrett Grolemund
+(2018). R Markdown: The Definitive Guide. Chapman and
+Hall/CRC. ISBN 9781138359338. URL
+<a href="https://bookdown.org/yihui/rmarkdown" class="uri">https://bookdown.org/yihui/rmarkdown</a>.</p>
+<ul>
+<li><p>Hadley Wickham, Jim Hester and Romain Francois (2018).
+readr: Read Rectangular Text Data.
+<a href="http://readr.tidyverse.org,https://github.com/tidyverse/readr" class="uri">http://readr.tidyverse.org,https://github.com/tidyverse/readr</a></p></li>
+<li><p>Elin Waring, Michael Quinn, Amelia McNamara, Eduardo
+Arino de la Rubia, Hao Zhu and Shannon Ellis (2020).
+skimr: Compact and Flexible Summaries of Data.
+<a href="https://docs.ropensci.org/skimr" class="uri">https://docs.ropensci.org/skimr</a> (website),
+<a href="https://github.com/ropensci/skimr" class="uri">https://github.com/ropensci/skimr</a>.</p></li>
+<li><p>Joseph Larmarange (2020). labelled: Manipulating
+Labelled Data. R package version 2.7.0.
+<a href="http://larmarange.github.io/labelled/" class="uri">http://larmarange.github.io/labelled/</a></p></li>
+</ul>
+<p>-Yihui Xie (2020). blogdown: Create Blogs and Websites
+with R Markdown. R package version 0.20.</p>
+<p>Yihui Xie, Alison Presmanes Hill, and Amber Thomas
+(2017). blogdown: Creating Websites with R Markdown.
+Chapman and Hall/CRC. ISBN 978-0815363729</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="../../../../index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="../../../../images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="../../../../js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

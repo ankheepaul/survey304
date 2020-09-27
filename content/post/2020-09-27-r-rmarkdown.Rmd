@@ -1,0 +1,130 @@
+---
+title: "Education & Gender May Bias Election Results"
+author: "Ankhee Paul"
+date: "25/09/2020"
+output:
+  html_document: default
+  pdf_document: default
+abstract: "There will be always be a preference while voting in terms of policies that are personally beneficial. In this paper, we explore the 2019 CES data set. We find that a high number of respondents are educated women, and there is a small representation of the educated LGBTQ+ community. Our findings have implications for the interests LGBTQ+ community." 
+---
+## I.Introduction
+
+ We explore the education level of Canadians based on gender groups. This allows some degree of understanding of election issues and party preferences. We find that the Canadian literacy rate is high, with a higher proportion of survey respondents being educated women while the LGBTQ+ comprises a very small proportion.
+ 
+ A bar plot is constructed that shows the level of education completed by Canadians who have undertaken the survey. Moreover, the plot divides the respondents into the respective gender groups they identify themselves as.
+ 
+ The paper outlines the fact that gender representation and the education level provide the ability for the population to understand issues pertaining to the election and a small representation of a certain group can bias results in a way that parties with policies in their interests, are not supported enough. The weakness here would be that everyone taking that survey may not intend to vote or may not be have enough awareness regarding issues in which case results can vary due to random voting. For the future, we intend to make a graph that shows the proportion of each gender group intending to actually vote in the election and their awareness regarding issues.
+
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = FALSE)
+setwd("/cloud/project")
+install.packages("devtools")
+devtools::install_github("hodgettsp/cesR")
+cesR::get_cescodes()
+library("cesR")
+install.packages("tidyverse")
+install.packages("readr")
+install.packages("skimr")
+library(tidyverse)
+library(readr)
+library(skimr)
+install.packages("labelled")
+library(labelled)
+get_ces("ces2019_web")
+ces2019_web <- to_factor(ces2019_web)
+head(ces2019_web)
+skimr::skim("ces2019_web")
+
+
+```
+
+## II.Data
+
+ The data set used in this report is the "ces2019_web" data set. It his survey data from the 2019 Canadian Election Study downloaded via that cesR package in R. 
+
+ The data set was cleaned and contained answers to survey questions that were mostly close-ended, nominal questions asking people whether they are Canadian citizens, their gender,etc. There are some open-ended questions such as what the respondent thinks is the most important issue in the federal election. There are also some likert and rating scale questions, that ask respondents their degree of satisfaction and a numeric measure of it through a sliding scale.
+
+ The answers in the data set have been converted to factors or categorical answers in order to make it easier to produce a graph.
+
+## III.Graph
+
+```{r eval=TRUE, fig.height=14, fig.width=10, warning=FALSE}
+library("tidyverse")
+ggplot(data= ces2019_web, 
+        aes (x=cps19_education, fill = cps19_gender))+
+  geom_bar(position = "dodge")+theme(axis.text.x = element_text(angle = 90)) + 
+  ggtitle("Gender-Education level")+
+  labs(x = "Education level", y=" number of people")
+
+```
+## IV.Discussion
+
+The graph produced is a bar plot using ggplot from the "tidyverse" package in R.
+In this bar plot, we categorize the respondents in terms of  gender and the level of education they have completed. The highest number of respondents are women who have completed a bachelor's degree.
+
+There are two things to be observed here. Firstly, there is a very small percentage of respondents  who have never been to a school or prefer not to answer. This implies that a high literacy rate in Canada encourages the ability to understand, and be more aware about issues, therefore, shaping voting decisions that would be beneficial for the country. 
+
+In almost all the different levels of education, women dominate, indicating that a higher proportion of educated women are taking part in the survey and the election, compared to men, and other gender identities. However, there is an extremely small proportion of the LGBTQ+ community represented in the graph. This suggests that either the community is not represented enough in the survey, and the elections or the community represents a very small proportion of the population. Moreover, the proportion of the LGBTQ+ community taking the survey seem to have received some degree of education, implying a fairly high literacy within the community.
+
+These findings have the certain implications towards the voting and policy preferences of the population. Since most of the sample seems to have some degree of education, it can be safe to assume that they would be able to, somewhat, understand some issues pertaining to the country in which case voting will not be random, in majority. Most importantly, their preference would lean towards parties resolving some of aforementioned issues or those, with policies that provide personal benefit to them, their families, etc. With such a small representation of the LGBTQ+ community, there may arise the situation where the results declare the winning party as one that does not necessarily have any policies benefiting the community, compared to some other party that may actually have policies favoring the LGBTQ+ community. In other words, the election results may be biased towards the preferences of a specific gender group, in this case, mostly women as they seem to be the largest proportion to have taken the survey.
+
+## V.Weaknesses and Next Steps.
+
+ There is a very obvious weakness here which is that everyone who responded to the survey may not end up voting. In that case, we would have to compare how many people from each gender group intend to vote in the elections. 
+ 
+ It is also fair to assume that other genders can look out for the interests of the LGBTQ+ community and the results may not be as biased. Moreover, a higher level of education may not always indicate awareness of issues. To check this, we would have to make a graph categorizing the gender groups on their awareness of issues.
+
+## VI.References
+- Stephenson, Laura B; Harell, Allison; Rubenson, Daniel; Loewen, Peter John, 2020, '2019 Canadian Election Study - Online Survey', https://doi.org/10.7910/DVN/DUS88V, Harvard Dataverse, V1
+
+- Stephenson, Laura, Allison Harrel, Daniel Rubenson and Peter Loewen. Forthcoming. 'Measuring Preferences and Behaviour in the 2019 Canadian Election Study,' Canadian Journal of Political Science.
+
+- Paul A. Hodgetts and Rohan Alexander (2020). cesR:
+  Access the CES Datasets a Little Easier.. R package
+  version 0.1.0.
+  
+-Hadley Wickham, Jim Hester and Winston Chang (2020).
+  devtools: Tools to Make Developing R Packages Easier.
+  https://devtools.r-lib.org/,https://github.com/r-lib/devtools.
+  
+- Wickham et al., (2019). Welcome to the tidyverse.
+  Journal of Open Source Software, 4(43), 1686,
+  https://doi.org/10.21105/joss.01686
+
+- R Core Team (2020). R: A language and environment for
+  statistical computing. R Foundation for Statistical
+  Computing, Vienna, Austria. URL https://www.R-project.org/.
+  
+-JJ Allaire and Yihui Xie and Jonathan McPherson and
+  Javier Luraschi and Kevin Ushey and Aron Atkins and
+  Hadley Wickham and Joe Cheng and Winston Chang and
+  Richard Iannone (2020). rmarkdown: Dynamic Documents
+  for R. R package version 2.3. URL
+  https://rmarkdown.rstudio.com.
+
+  Yihui Xie and J.J. Allaire and Garrett Grolemund
+  (2018). R Markdown: The Definitive Guide. Chapman and
+  Hall/CRC. ISBN 9781138359338. URL
+  https://bookdown.org/yihui/rmarkdown.
+
+- Hadley Wickham, Jim Hester and Romain Francois (2018).
+  readr: Read Rectangular Text Data.
+  http://readr.tidyverse.org,https://github.com/tidyverse/readr
+
+- Elin Waring, Michael Quinn, Amelia McNamara, Eduardo
+  Arino de la Rubia, Hao Zhu and Shannon Ellis (2020).
+  skimr: Compact and Flexible Summaries of Data.
+  https://docs.ropensci.org/skimr (website),
+  https://github.com/ropensci/skimr.
+
+- Joseph Larmarange (2020). labelled: Manipulating
+  Labelled Data. R package version 2.7.0.
+  http://larmarange.github.io/labelled/
+  
+-Yihui Xie (2020). blogdown: Create Blogs and Websites
+  with R Markdown. R package version 0.20.
+
+  Yihui Xie, Alison Presmanes Hill, and Amber Thomas
+  (2017). blogdown: Creating Websites with R Markdown.
+  Chapman and Hall/CRC. ISBN 978-0815363729
